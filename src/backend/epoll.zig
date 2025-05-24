@@ -97,7 +97,7 @@ pub const Loop = struct {
         }
     }
 
-    fn done(self: *Loop) bool {
+    pub fn done(self: *Loop) bool {
         return self.flags.stopped or (self.active == 0 and
             self.submissions.empty());
     }

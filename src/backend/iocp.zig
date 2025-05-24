@@ -516,7 +516,7 @@ pub const Loop = struct {
                     asSocket(v.internal_accept_socket.?),
                     &v.storage,
                     0,
-                    0,
+                    @as(u32, @intCast(@sizeOf(posix.sockaddr.storage))),
                     @as(u32, @intCast(@sizeOf(posix.sockaddr.storage))),
                     &discard,
                     &completion.overlapped,

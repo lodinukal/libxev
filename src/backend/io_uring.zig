@@ -81,6 +81,10 @@ pub const Loop = struct {
         }
     }
 
+    pub fn done(self: *Loop) bool {
+        return self.stopped() or (self.active == 0 and self.submissions.empty());
+    }
+
     /// Stop the loop. This can only be called from the main thread.
     /// This will stop the loop forever. Future ticks will do nothing.
     /// All completions are safe to read/write once any outstanding

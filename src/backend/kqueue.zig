@@ -289,6 +289,12 @@ pub const Loop = struct {
         }
     }
 
+    pub fn done(self: *Loop) bool {
+        return self.flags.stopped or (self.active == 0 and
+            self.submissions.empty() and
+            self.completions.empty());
+    }
+
     /// Tick through the event loop once, waiting for at least "wait" completions
     /// to be processed by the loop itself.
     pub fn tick(self: *Loop, wait: u32) !void {
@@ -686,12 +692,6 @@ pub const Loop = struct {
             .nsec = std.math.add(isize, self.cached_now.nsec, next_ns) catch
                 return max,
         };
-    }
-
-    fn done(self: *Loop) bool {
-        return self.flags.stopped or (self.active == 0 and
-            self.submissions.empty() and
-            self.completions.empty());
     }
 
     /// Start the completion. This returns true if the Kevent was set
@@ -1590,12 +1590,12 @@ pub const ReadError = posix.KEventError ||
     posix.PReadError ||
     posix.RecvFromError ||
     error{
-    EOF,
-    Canceled,
-    MissingKevent,
-    PermissionDenied,
-    Unexpected,
-};
+        EOF,
+        Canceled,
+        MissingKevent,
+        PermissionDenied,
+        Unexpected,
+    };
 
 pub const WriteError = posix.KEventError ||
     posix.WriteError ||
@@ -1604,10 +1604,10 @@ pub const WriteError = posix.KEventError ||
     posix.SendMsgError ||
     posix.SendToError ||
     error{
-    Canceled,
-    PermissionDenied,
-    Unexpected,
-};
+        Canceled,
+        PermissionDenied,
+        Unexpected,
+    };
 
 pub const MachPortError = posix.KEventError || error{
     Canceled,
